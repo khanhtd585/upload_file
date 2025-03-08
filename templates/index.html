@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #progress {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload Files</h2>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" multiple>
+        <button type="button" onclick="uploadFiles()">Upload</button>
+    </form>
+    <div id="progress">Progress: 0 / 0</div>
+    <script>
+        async function uploadFiles() {
+            let files = document.getElementById('fileInput').files;
+            let total = files.length;
+            let completed = 0;
+            document.getElementById('progress').innerText = `Progress: ${completed} / ${total}`;
+            
+            for (let file of files) {
+                let formData = new FormData();
+                formData.append("files", file);
+                await fetch("/upload/", {
+                    method: "POST",
+                    body: formData
+                });
+                completed++;
+                document.getElementById('progress').innerText = `Progress: ${completed} / ${total}`;
+            }
+        }
+    </script>
+</body>
+</html>
